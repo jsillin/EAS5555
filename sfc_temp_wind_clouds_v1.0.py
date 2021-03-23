@@ -2,8 +2,9 @@
 This script makes a simple plot of surface temperature and 10m winds from a wrfout.nc file
 
 Written 3/19/21 by Jack Sillin for EAS 5555
+Updated 3/23/21
 
-This is version 0.0 of this script.
+This is version 1.0 of this script.
 '''
 
 ########## SETUP ##########
