@@ -1,2 +1,5 @@
-.nc
-.png
+*/__pycache__/*
+*.nc
+*.png
+*/data/*
+*/output_maps/*
