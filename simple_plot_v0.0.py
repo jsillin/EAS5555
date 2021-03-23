@@ -3,7 +3,7 @@ This script makes a simple plot of surface temperature and 10m winds from a wrfo
 
 Written 3/15/21 by Jack Sillin for EAS 5555
 
-This is version 0.0 of this script.
+This is version 0.1 of this script.
 '''
 
 ########## SETUP ##########
@@ -18,7 +18,7 @@ import matplotlib.lines as lines
 
 # Read data with xarray
 data_path = 'data/'
-filename = 'wrfout_basic_casestudy.nc'
+filename = 'matthew_wrfout.nc'
 path = data_path + filename
 print(path)
 ds = xr.open_dataset(path)
@@ -82,4 +82,4 @@ ax1.set_title('Valid: '+dtfs,fontsize=11,loc='right')
 leg = ax1.legend(handles=[blue_line],loc=3,framealpha=1)
 
 # Save output graphic
-plt.savefig('sfc_tempsandwinds_'+dtfs+'.png')
+plt.savefig('sfc_tempsandwinds_v1'+dtfs+'.png')
