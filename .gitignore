@@ -5,3 +5,4 @@
 *.grib2
 /data/*
 /output_maps/*
+*.gif
