@@ -1,10 +1,11 @@
 '''
-This script makes a plots MSLP, simulated reflectivity, and 10m winds from a wrfout.nc file
+This script makes a plots simulated reflectivity, and 10m winds from a wrfout.nc file
 
 Written 3/19/21 by Jack Sillin for EAS 5555
-Updated 3/24/21
+Updated 3/28/21
 
-This is version 0.2 of this script.
+This is version 0.3 of this script.
+-Remove MSLP, in future version may try to plot smoothed.
 '''
 
 ########## SETUP ##########
@@ -23,10 +24,10 @@ from metpy.plots import ctables
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap, Normalize
 
 #Read File
-ncfile = Dataset("data/realtime_3-23-21_18z_1km/middlenest3km.nc")
+ncfile = Dataset("data/realtime_3-24-21_12z_333m/333mnest_v2_23z.nc")
 
 #Loop though a lot of forecast times. It'll stop when you run out, don't worry.
-for i in range(0,240):
+for i in range(0,800):
     #Extract variables
     simrad = wrf.getvar(ncfile,'dbz',timeidx=i)
     slp = wrf.getvar(ncfile,'slp',timeidx=i)
@@ -47,7 +48,7 @@ for i in range(0,240):
     lon = wrf.getvar(ncfile,'lon')
 
     # Thin the wind arrays a bit for plotting nicely
-    wind_slice = slice(6,-6,6)
+    wind_slice = slice(25,-25,25)
     sliced_lats = lat[wind_slice,wind_slice]
     sliced_lons = lon[wind_slice,wind_slice]
     sliced_u10m = u_10m[wind_slice,wind_slice]
@@ -68,23 +69,19 @@ for i in range(0,240):
 
     # Plot 2m temps
     refc = ax1.contourf(lon,lat,simrad,norm=newnorm,cmap=newcmap,levels=range(5,75,1))
-    #tmp_2m32 = ax1.contour(lon,lat,t2m,colors='b', alpha = 0.8, levels = [32])
     cbr = fig.colorbar(refc, orientation = 'horizontal', aspect = 80, ax = ax1, pad = 0.01,
                         extendrect=False, ticks = range(-20,100,5), shrink=0.85)
     cbr.set_label('Reflectivity (dBZ)', fontsize = 14)
 
-    h_contour = ax1.contour(lon, lat, slp, colors='dimgray', levels=range(940,1040,4),linewidths=2)
+    #h_contour = ax1.contour(lon, lat, slp, colors='dimgray', levels=range(940,1040,4),linewidths=2)
 
     # Plot 10m winds thinned out for better presentation
     ax1.barbs(sliced_lons,sliced_lats,sliced_u10m,sliced_v10m, length=6,color='gray')
 
     # Set titles
-    ax1.set_title('Simulated Reflectivity (dBZ), MSLP (hPa), and 10m Winds (kts)')
+    ax1.set_title('Simulated Reflectivity (dBZ), and 10m Winds (kts)')
     ax1.set_title('Init 18z 3-23-21 from GFS',fontsize=11,loc='left')
     ax1.set_title('Valid: '+dtfs,fontsize=11,loc='right')
 
-    # Add legend
-    #leg = ax1.legend(handles=[blue_line],loc=3,framealpha=1)
-
     # Save output graphic
-    plt.savefig('simrad_realtime_v1_3kmnest_'+dtfs+'.png',bbox_inches='tight',pad_inches=0.1)
+    plt.savefig('simrad_realtime_v5_333mnest_'+dtfs+'.png',bbox_inches='tight',pad_inches=0.1)
