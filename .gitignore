@@ -1,5 +1,7 @@
 */__pycache__/*
 *.nc
 *.png
-*/data/*
-*/output_maps/*
+*.idx
+*.grib2
+/data/*
+/output_maps/*
