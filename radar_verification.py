@@ -2,8 +2,10 @@
 Verify WRF radar output against actual radar data
 
 Written 3-25-21 by Jack Sillin for EAS 5555
+Updated 3-28-21
 
-This is version 0.0 of this script
+This is version 0.1 of this script
+-Added a colorbar (lol)
 '''
 
 #Import Necessary Packages
