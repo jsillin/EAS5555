@@ -18,6 +18,7 @@ import wrf
 from netCDF4 import Dataset
 from metpy.plots import ctables
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap, Normalize
+import colorbars_v0 as cbars
 
 mrmsn = xr.open_dataset('data/MRMS_BaseReflectivity_20210325_2200.grib2',engine='cfgrib')
 #mrmsn = xr.open_dataset('https://thredds.ucar.edu/thredds/dodsC/grib/NCEP/MRMS/BaseRef/MRMS_BaseReflectivity_20210326_2100.grib2')
@@ -104,9 +105,6 @@ newnorm = Normalize(0,77)
 # Plot 2m temps
 refc = ax1.contourf(lon,lat,simrad,norm=newnorm,cmap=newcmap,levels=range(5,75,1))
 #tmp_2m32 = ax1.contour(lon,lat,t2m,colors='b', alpha = 0.8, levels = [32])
-#cbr = fig.colorbar(refc, orientation = 'horizontal', aspect = 80, ax = ax1, pad = 0.01,
-#                    extendrect=False, ticks = range(-20,100,5), shrink=0.85)
-#cbr.set_label('Reflectivity (dBZ)', fontsize = 14)
 
 #h_contour = ax1.contour(lon, lat, slp, colors='dimgray', levels=range(940,1040,4),linewidths=2)
 
@@ -131,13 +129,11 @@ ax2.add_feature(cfeature.STATES.with_scale('10m'), linewidth=2.0)
 norm_ref, cmap_ref = ctables.registry.get_with_steps('NWSStormClearReflectivity', -20., .5)
 newcmap = ListedColormap(cmap_ref(range(40, 194)))
 newnorm = Normalize(0,77)
-
+clevs = range(5,75,1)
 # Plot 2m temps
-refc = ax2.contourf(lon_points,lat_points,mrms.values,norm=newnorm,cmap=newcmap,levels=range(5,75,1))#,transform=ccrs.PlateCarree())
+refc = ax2.contourf(lon_points,lat_points,mrms.values,norm=newnorm,cmap=newcmap,levels=clevs)#,transform=ccrs.PlateCarree())
 #tmp_2m32 = ax2.contour(lon,lat,t2m,colors='b', alpha = 0.8, levels = [32])
-cbr = fig.colorbar(refc, orientation = 'horizontal', aspect = 80, ax = [ax1,ax2], pad = 0.01,
-                    extendrect=False, ticks = range(-20,100,5), shrink=0.85)
-cbr.set_label('Reflectivity (dBZ)', fontsize = 14)
+
 
 # Plot 10m winds thinned out for better presentation
 #ax2.barbs(sliced_lons,sliced_lats,sliced_u10m,sliced_v10m, length=6,color='gray')
@@ -147,4 +143,7 @@ ax2.set_title('Observed Reflectivity (dBZ)')
 ax2.set_title('MRMS',fontsize=11,loc='left')
 ax2.set_title('Valid: '+dtfs,fontsize=11,loc='right')
 fig.tight_layout()
-plt.savefig('mrms_v16.png',bbox_inches='tight',pad_inches=0.1)
+
+cbars.addrefverifcolorbar(ax1,fig,refc,clevs)
+fig.tight_layout()
+plt.savefig('mrms_v20.png',bbox_inches='tight',pad_inches=0.1)
